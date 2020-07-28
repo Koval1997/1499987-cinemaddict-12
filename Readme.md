@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Максим](https://up.htmlacademy.ru/ecmascript/12/user/1499987).
-* Наставник: `Неизвестно`.
+* Наставник: [Артемий Бойков](https://htmlacademy.ru/profile/id607755).
 
 ---
 
