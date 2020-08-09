@@ -14,9 +14,6 @@ export const createFilmDetailsCardTemplate = (film) => {
     description,
     ageRating,
     comments,
-    isWatched,
-    isInWatchlist,
-    isFavorite
   } = film;
 
   const formatedReleaseDate = releaseDate.format(`DD MMMM YYYY`);

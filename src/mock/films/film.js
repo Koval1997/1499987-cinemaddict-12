@@ -8,8 +8,8 @@ import {
 } from './filmsData';
 
 import {
-  getRandomInteger, 
-  getRandomDate, 
+  getRandomInteger,
+  getRandomDate,
   getRandomDecimal,
   getRandomElemenstFromArray,
   getRandomDescription

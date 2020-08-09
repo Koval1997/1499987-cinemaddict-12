@@ -22,7 +22,7 @@ export const createMenuTemplate = (filters) => {
   );
 };
 
-const createFilterItemTemplate = (filter, isCheked) => {
+const createFilterItemTemplate = (filter) => {
   const {
     name,
     count
