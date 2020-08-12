@@ -1,7 +1,7 @@
-export const createFilmsCountTemplate = () => {
+export const createFilmsCountTemplate = (filmsCount) => {
   return (
     `<section class="footer__statistics">
-      <p>130 291 movies inside</p>
+      <p>${filmsCount} movies inside</p>
       </section>`
   );
 };
