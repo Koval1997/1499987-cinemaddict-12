@@ -26,6 +26,7 @@ export const generateFilm = () => {
   } = filmsData[getRandomInteger(0, 4)];
 
   const description = getRandomDescription();
+  const ageRating = `${getRandomInteger(3, 18)}+`;
   const rating = getRandomDecimal(1.0, 10.0);
   const director = getRandomElemenstFromArray(directorsList)[0];
   const writers = getRandomElemenstFromArray(writersList);
@@ -55,7 +56,7 @@ export const generateFilm = () => {
     country,
     genres,
     description,
-    ageRating: `18+`,
+    ageRating,
     comments,
     isWatched,
     isInWatchlist,

@@ -1,4 +1,6 @@
-export const createFilmDetailsCardTemplate = (film) => {
+import {createElement} from '../utils';
+
+const createFilmDetailsCardTemplate = (film) => {
   const {
     posterSrc,
     name,
@@ -19,7 +21,8 @@ export const createFilmDetailsCardTemplate = (film) => {
   const formatedReleaseDate = releaseDate.format(`DD MMMM YYYY`);
 
   return (
-    `<form class="film-details__inner" action="" method="get">
+    `<section class="film-details">
+    <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
       <div class="film-details__close">
         <button class="film-details__close-btn" type="button">close</button>
@@ -133,7 +136,8 @@ export const createFilmDetailsCardTemplate = (film) => {
         </div>
       </section>
     </div>
-  </form>`
+  </form>
+  </section>`
   );
 };
 
@@ -164,3 +168,26 @@ const renderComments = (comments) => {
     </div>
   </li>`).join(``);
 };
+
+export default class FilmDetail {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

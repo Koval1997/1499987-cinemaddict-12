@@ -1,6 +1,6 @@
-import {capitalizeFirstLetter} from '../utils';
+import {capitalizeFirstLetter, createElement} from '../utils';
 
-export const createMenuTemplate = (filters) => {
+const createMenuTemplate = (filters) => {
   const filterItemsTemplate = filters
     .map((filter, index) => createFilterItemTemplate(filter, index === 0))
     .join(``);
@@ -32,3 +32,26 @@ const createFilterItemTemplate = (filter) => {
 
   return `<a href="#${name}" class="main-navigation__item">${normalizedName} <span class="main-navigation__item-count">${count}</span></a>`;
 };
+
+export default class SiteMenu {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenuTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
