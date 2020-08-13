@@ -9,7 +9,7 @@ const createUserRankTemplate = (userRank) => {
   );
 };
 
-export default class UserRank {
+export default class HeaderProfile {
   constructor(rank) {
     this._rank = rank;
     this._element = null;

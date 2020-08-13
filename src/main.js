@@ -1,11 +1,11 @@
-import UserRank from './view/header-profile';
+import HeaderProfile from './view/header-profile';
 import SiteMenu from './view/site-menu';
 import FilmsList from './view/films-list';
 import Film from './view/film-card';
 import FilmDetail from './view/film-details';
 import ShowMoreButton from './view/show-more-button';
 import ExtraFilmsList from './view/extra-film-section';
-import FilmsCount from './view/footer-statistics';
+import FooterStatistic from './view/footer-statistic';
 import {generateFilm} from './mock/films/film';
 import {generateFilter} from './mock/filters/filter';
 import {render, RenderPosition} from './utils';
@@ -17,64 +17,53 @@ const EXTRA_FILMS_COUNT = 2;
 const TOP_RATED_BLOCK_TITLE = `Top rated`;
 const MOST_COMMENTED_BLOCK_TITLE = `Most commented`;
 
+const USER_RANK_TITLE = `Movie Buff`;
+const FILMS_LIST_TITLE = `All movies. Upcoming`;
+
 const FILMS_LIST_CONTAINER_SELECTOR = `.films-list__container`;
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilm);
 const filters = generateFilter(films);
 
-const renderExtraFilmCard = (container, cardsCount) => {
-  for (let i = 0; i < cardsCount; i++) {
-    renderFilm(container, films[i]);
-  }
-};
-
-const findContainerInExtraFilmsBlockByTitle = (title) => {
-  return Array.from(document.querySelectorAll(`.films-list--extra`))
-    .filter((el) => el.innerText.includes(title))[0];
-};
-
 const renderFilm = (filmListElement, film) => {
- const filmComponent = new Film(film);
- const filmDetailComponent = new FilmDetail(film);
- const filmComponentElement = filmComponent.getElement();
- const bodyElement = document.querySelector(`body`);
+  const filmComponent = new Film(film);
+  const filmDetailComponent = new FilmDetail(film);
+  const filmComponentElement = filmComponent.getElement();
+  const bodyElement = document.querySelector(`body`);
 
- const openPopup = () => {
-  bodyElement.appendChild(filmDetailComponent.getElement());
+  const openPopup = () => {
+    bodyElement.appendChild(filmDetailComponent.getElement());
+  };
+
+  const closePopup = () => {
+    bodyElement.removeChild(filmDetailComponent.getElement());
+  };
+
+  [
+    filmComponentElement.querySelector(`.film-card__poster`),
+    filmComponentElement.querySelector(`.film-card__title`),
+    filmComponentElement.querySelector(`.film-card__comments`)
+  ].map((element) => element.addEventListener(`click`, () => {
+    openPopup();
+  }));
+
+  filmDetailComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    closePopup();
+  });
+
+  render(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
 };
-
-const closePopup = () => {
-  bodyElement.removeChild(filmDetailComponent.getElement());
-};
-
-const interactiveFilmCardElements = [
-  filmComponentElement.querySelector(`.film-card__poster`),
-  filmComponentElement.querySelector(`.film-card__title`),
-  filmComponentElement.querySelector(`.film-card__comments`)
- ].map((element) => element
-                      .addEventListener(`click`, () => {
-                        openPopup();
-                      }));
-
-filmDetailComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  closePopup();
-});
-
- render(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
-}
 
 const pageHeaderElement = document.querySelector(`.header`);
-render(pageHeaderElement, new UserRank(`Movie Buff`).getElement(), RenderPosition.BEFOREEND);
+render(pageHeaderElement, new HeaderProfile(USER_RANK_TITLE).getElement(), RenderPosition.BEFOREEND);
 
 const pageMainElement = document.querySelector(`.main`);
 render(pageMainElement, new SiteMenu(filters).getElement(), RenderPosition.BEFOREEND);
-render(pageMainElement, new FilmsList(`All movies. Upcoming`).getElement(), RenderPosition.BEFOREEND);
+render(pageMainElement, new FilmsList(FILMS_LIST_TITLE).getElement(), RenderPosition.BEFOREEND);
 
 const pageMainFilmsContainer = pageMainElement.querySelector(`.films`);
 const pageFilmsListContainerElement = pageMainFilmsContainer.querySelector(FILMS_LIST_CONTAINER_SELECTOR);
-
-//render(pageFilmsListContainerElement, new FilmDetail(films[0]).getElement(), RenderPosition.BEFOREEND);
 
 for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
   renderFilm(pageFilmsListContainerElement, films[i]);
@@ -104,6 +93,17 @@ if (films.length > FILM_COUNT_PER_STEP) {
   });
 }
 
+const findContainerInExtraFilmsBlockByTitle = (title) => {
+  return Array.from(document.querySelectorAll(`.films-list--extra`))
+    .filter((el) => el.innerText.includes(title))[0];
+};
+
+const renderExtraFilmCard = (container, cardsCount) => {
+  for (let i = 0; i < cardsCount; i++) {
+    renderFilm(container, films[i]);
+  }
+};
+
 render(pageMainFilmsContainer, new ExtraFilmsList(TOP_RATED_BLOCK_TITLE).getElement(), RenderPosition.BEFOREEND);
 const pageTopRatedFilmsListElement = findContainerInExtraFilmsBlockByTitle(TOP_RATED_BLOCK_TITLE);
 const pageTopRatedFilmsContainerElement = pageTopRatedFilmsListElement.querySelector(FILMS_LIST_CONTAINER_SELECTOR);
@@ -116,4 +116,4 @@ renderExtraFilmCard(pageMostCommentedFilmsContainerElement, EXTRA_FILMS_COUNT);
 
 const pageFooterElement = document.querySelector(`.footer`);
 const pageFooterStatisticsElement = pageFooterElement.querySelector(`.footer__statistics`);
-render(pageFooterStatisticsElement, new FilmsCount(films.length).getElement(), `beforeend`);
+render(pageFooterStatisticsElement, new FooterStatistic(films.length).getElement(), RenderPosition.BEFOREEND);

@@ -8,7 +8,7 @@ const createFilmsCountTemplate = (filmsCount) => {
   );
 };
 
-export default class FilmsCount {
+export default class FooterStatistic {
   constructor(count) {
     this._count = count;
     this._element = null;
