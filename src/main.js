@@ -4,7 +4,7 @@ import FilmsList from './view/films-list';
 import FilmCard from './view/film-card';
 import FilmDetails from './view/film-details';
 import ShowMoreButton from './view/show-more-button';
-import ExtraFilmsList from './view/extra-film-list';
+import ExtraFilmsList from './view/extra-films-list';
 import FooterStatistic from './view/footer-statistic';
 import {generateFilm} from './mock/films/film';
 import {generateFilter} from './mock/filters/filter';
