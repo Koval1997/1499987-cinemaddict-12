@@ -169,7 +169,7 @@ const renderComments = (comments) => {
   </li>`).join(``);
 };
 
-export default class FilmDetail {
+export default class FilmDetails {
   constructor(film) {
     this._film = film;
     this._element = null;

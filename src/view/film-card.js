@@ -50,7 +50,7 @@ const getControlButtonActiveClass = (isMarked) => {
     : ``;
 };
 
-export default class Film {
+export default class FilmCard {
   constructor(film) {
     this._film = film;
     this._element = null;

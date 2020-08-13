@@ -1,10 +1,10 @@
 import HeaderProfile from './view/header-profile';
 import SiteMenu from './view/site-menu';
 import FilmsList from './view/films-list';
-import Film from './view/film-card';
-import FilmDetail from './view/film-details';
+import FilmCard from './view/film-card';
+import FilmDetails from './view/film-details';
 import ShowMoreButton from './view/show-more-button';
-import ExtraFilmsList from './view/extra-film-section';
+import ExtraFilmsList from './view/extra-film-list';
 import FooterStatistic from './view/footer-statistic';
 import {generateFilm} from './mock/films/film';
 import {generateFilter} from './mock/filters/filter';
@@ -26,8 +26,8 @@ const films = new Array(FILMS_COUNT).fill().map(generateFilm);
 const filters = generateFilter(films);
 
 const renderFilm = (filmListElement, film) => {
-  const filmComponent = new Film(film);
-  const filmDetailComponent = new FilmDetail(film);
+  const filmComponent = new FilmCard(film);
+  const filmDetailComponent = new FilmDetails(film);
   const filmComponentElement = filmComponent.getElement();
   const bodyElement = document.querySelector(`body`);
 
