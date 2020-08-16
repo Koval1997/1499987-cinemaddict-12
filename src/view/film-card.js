@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import AbstractView from "./abstract.js";
 
 const createFilmCardTemplate = (film) => {
   const {
@@ -50,25 +50,29 @@ const getControlButtonActiveClass = (isMarked) => {
     : ``;
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+    this._detailsClickHandler = this._detailsClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _detailsClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.showDetailsClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setShowDetailsClickHandler(callback) {
+    this._callback.showDetailsClick = callback;
+
+    [
+      this.getElement().querySelector(`.film-card__poster`),
+      this.getElement().querySelector(`.film-card__title`),
+      this.getElement().querySelector(`.film-card__comments`)
+    ].map((element) => element.addEventListener(`click`, this._detailsClickHandler));
   }
 }
