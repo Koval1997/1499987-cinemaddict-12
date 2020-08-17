@@ -13,7 +13,7 @@ import {
   getRandomDecimal,
   getRandomElemenstFromArray,
   getRandomDescription
-} from '../../utils';
+} from '../../utils/common.js';
 
 import {generateComment} from '../comments/comment';
 
