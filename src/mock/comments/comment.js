@@ -1,5 +1,5 @@
 import {commentsData} from './commentsData';
-import {getRandomInteger, getRandomDate} from '../../utils';
+import {getRandomInteger, getRandomDate} from '../../utils/common';
 
 export const generateComment = () => {
   const {
