@@ -12,7 +12,8 @@ import {
   getRandomDate,
   getRandomDecimal,
   getRandomElemenstFromArray,
-  getRandomDescription
+  getRandomDescription,
+  generateId
 } from '../../utils/common.js';
 
 import {generateComment} from '../comments/comment';
@@ -44,6 +45,7 @@ export const generateFilm = () => {
   }
 
   return {
+    id: generateId(),
     posterSrc,
     name,
     originalName,
