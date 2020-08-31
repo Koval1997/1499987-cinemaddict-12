@@ -26,9 +26,9 @@ export default class Smart extends AbstractView {
     }
 
     this._data = Object.assign(
-      {},
-      this._data,
-      updatedProperty
+        {},
+        this._data,
+        updatedProperty
     );
 
     if (onlyDataUpdating) {

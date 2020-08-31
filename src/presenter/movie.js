@@ -79,37 +79,35 @@ export default class Movie {
 
   _handleAddToFavoritesClick() {
     this._changeData(
-      Object.assign(
-        {},
-        this._film,
-        {
-          isFavorite: !this._film.isFavorite
-        }
-      ));
+        Object.assign(
+            {},
+            this._film,
+            {
+              isFavorite: !this._film.isFavorite
+            }
+        ));
   }
 
   _handleAlreadyWatchedClick() {
     this._changeData(
-      Object.assign(
-        {},
-        this._film,
-        {
-          isWatched: !this._film.isWatched
-        }
-      )
-    );
+        Object.assign(
+            {},
+            this._film,
+            {
+              isWatched: !this._film.isWatched
+            }
+        ));
   }
 
   _handleAddToWatchlistClick() {
     this._changeData(
-      Object.assign(
-        {},
-        this._film,
-        {
-          isInWatchlist: !this._film.isInWatchlist
-        }
-      )
-    );
+        Object.assign(
+            {},
+            this._film,
+            {
+              isInWatchlist: !this._film.isInWatchlist
+            }
+        ));
   }
 
   _handleShowDetailsClick() {
