@@ -41,15 +41,17 @@ export default class Movie {
     this._filmDetailComponent = new FilmDetails(film);
     this._newCommentComponent = new NewCommentView();
 
+    this._filmComponent.setShowDetailsClickHandler(this._handleShowDetailsClick);
     this._filmComponent.setAddToFavoritesClickHandler(this._handleAddToFavoritesClick);
     this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
-    this._filmComponent.setShowDetailsClickHandler(this._handleShowDetailsClick);
 
     this._filmDetailComponent.setClosePopupClickHandler(this._handleClosePopupClick);
     this._filmDetailComponent.setAddToFavoritesClickHandler(this._handleAddToFavoritesClick);
     this._filmDetailComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmDetailComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
+
+    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
 
     const newCommentContainer = this._filmDetailComponent.getElement().querySelector(`.film-details__comments-wrap`);
 
@@ -114,6 +116,14 @@ export default class Movie {
     this._bodyElement.appendChild(this._filmDetailComponent.getElement());
     this._changeMode();
     this._mode = Mode.POPUP;
+    document.addEventListener(`keydown`, this._escKeyDownHandler);
+  }
+
+  _escKeyDownHandler(evt) {
+    if (evt.key === `Escape` || evt.key === `Esc` || evt.code === 27) {
+      this._handleClosePopupClick();
+      document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    }
   }
 
   _handleClosePopupClick() {

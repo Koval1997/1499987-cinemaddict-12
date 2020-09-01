@@ -25,7 +25,7 @@ export default class MovieList {
   init(films) {
     this._films = films.slice();
 
-    this._filmsListComponent = new FilmsList(FILMS_LIST_TITLE);
+    this._filmsListComponent = new FilmsList(FILMS_LIST_TITLE, this._films.length);
     this._filmsListContainer = this._filmsListComponent.getElement().querySelector(`.films-list__container`);
     render(this._pageMainElement, this._filmsListComponent, RenderPosition.BEFOREEND);
 
