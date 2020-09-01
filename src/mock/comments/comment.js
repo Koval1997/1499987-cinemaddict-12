@@ -1,14 +1,14 @@
 import {commentsData} from './commentsData';
-import {getRandomInteger, getRandomDate} from '../../utils/common';
+import {getRandomInteger} from '../../utils/common';
 
 export const generateComment = () => {
   const {
     text,
     emotion,
-    author
+    author,
+    date
   } = commentsData[getRandomInteger(0, 3)];
 
-  const date = getRandomDate().format(`YYYY/MM/DD HH:MM`);
 
   return {
     text,

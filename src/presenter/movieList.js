@@ -1,8 +1,9 @@
 import FilmsList from '../view/films-list';
-import FilmCard from '../view/film-card';
-import FilmDetails from '../view/film-details';
 import ShowMoreButton from '../view/show-more-button';
+import Movie from './movie';
+
 import {render, RenderPosition, remove} from '../utils/render';
+import {updateItem} from '../utils/common';
 
 const FILMS_LIST_TITLE = `All movies. Upcoming`;
 const FILM_COUNT_PER_STEP = 5;
@@ -13,14 +14,19 @@ export default class MovieList {
     this._renderedFilmsCount = FILM_COUNT_PER_STEP;
 
     this._showMoreButtonComponent = new ShowMoreButton();
-    this._filmsListComponent = new FilmsList(FILMS_LIST_TITLE);
 
+    this._filmPresenter = {};
+
+    this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+    this._handleChangeFilmMode = this._handleChangeFilmMode.bind(this);
   }
 
   init(films) {
     this._films = films.slice();
 
+    this._filmsListComponent = new FilmsList(FILMS_LIST_TITLE);
+    this._filmsListContainer = this._filmsListComponent.getElement().querySelector(`.films-list__container`);
     render(this._pageMainElement, this._filmsListComponent, RenderPosition.BEFOREEND);
 
     this._renderList();
@@ -41,28 +47,14 @@ export default class MovieList {
   }
 
   _renderFilm(film) {
-    const filmComponent = new FilmCard(film);
-    const filmDetailComponent = new FilmDetails(film);
-    const bodyElement = document.querySelector(`body`);
+    const filmPresenter = new Movie(this._filmsListContainer, this._handleFilmChange, this._handleChangeFilmMode);
+    filmPresenter.init(film);
+    this._filmPresenter[film.id] = filmPresenter;
+  }
 
-    const openPopup = () => {
-      bodyElement.appendChild(filmDetailComponent.getElement());
-    };
-
-    const closePopup = () => {
-      bodyElement.removeChild(filmDetailComponent.getElement());
-    };
-
-    filmComponent.setShowDetailsClickHandler(() => {
-      openPopup();
-    });
-
-    filmDetailComponent.setClosePopupClickHandler(() => {
-      closePopup();
-    });
-
-    const filmsListContainer = this._filmsListComponent.getElement().querySelector(`.films-list__container`);
-    render(filmsListContainer, filmComponent, RenderPosition.BEFOREEND);
+  _handleFilmChange(updatedFilm) {
+    this._films = updateItem(this._films, updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm);
   }
 
   _handleShowMoreButtonClick() {
@@ -75,8 +67,20 @@ export default class MovieList {
   }
 
   _renderShowMoreButton() {
-    render(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFOREEND);
+    render(this._filmsListContainer, this._showMoreButtonComponent, RenderPosition.BEFOREEND);
 
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
+  }
+
+  _clearFilmsList() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._filmPresenter = {};
+    this._renderedFilmsCount = FILM_COUNT_PER_STEP;
+  }
+
+  _handleChangeFilmMode() {
+    Object.values(this._filmPresenter).forEach((filmPresenter) => filmPresenter.resetView());
   }
 }
