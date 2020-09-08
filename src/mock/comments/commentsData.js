@@ -1,26 +1,27 @@
 import {getRandomDate} from '../../utils/common';
+import {Emoji} from '../../const';
 
 export const commentsData = [{
   text: `Interesting setting and a good cast`,
-  emotion: `/images/emoji/smile.png`,
+  emoji: Emoji.SMILE,
   author: `Tim Macoveev`,
   date: getRandomDate().format(`YYYY/MM/DD HH:MM`),
 },
 {
   text: `Booooooooooring`,
-  emotion: `./images/emoji/sleeping.png`,
+  emoji: Emoji.SLEEPING,
   author: `John Doe`,
   date: getRandomDate().format(`YYYY/MM/DD HH:MM`),
 },
 {
   text: `Very very old. Meh`,
-  emotion: `./images/emoji/puke.png`,
+  emoji: Emoji.PUKE,
   author: `John Doe`,
   date: getRandomDate().format(`YYYY/MM/DD HH:MM`),
 },
 {
   text: `Almost two hours? Seriously?`,
-  emotion: `/images/emoji/angry.png`,
+  emoji: Emoji.ANGRY,
   author: `John Doe`,
   date: getRandomDate().format(`YYYY/MM/DD HH:MM`),
 }];
