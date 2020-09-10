@@ -36,7 +36,7 @@ export const generateFilm = () => {
   const country = getRandomElemenstFromArray(countriesList)[0];
   const genres = getRandomElemenstFromArray(genresList);
   const isWatched = Boolean(getRandomInteger(0, 1));
-  const isInWatchlist = isWatched ? false : Boolean(getRandomInteger(0, 1));
+  const isInWatchlist = Boolean(getRandomInteger(0, 1));
   const isFavorite = Boolean(getRandomInteger(0, 1));
   const comments = [];
 

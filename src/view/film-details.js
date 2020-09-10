@@ -1,12 +1,4 @@
 import SmartView from "./smart.js";
-import CommentsView from "./comments";
-
-export const EMOTIONS = [
-  `smile`,
-  `sleeping`,
-  `puke`,
-  `angry`
-];
 
 const createFilmDetailsCardTemplate = (film) => {
   const {
@@ -28,8 +20,6 @@ const createFilmDetailsCardTemplate = (film) => {
     isWatched,
     isFavorite,
   } = film;
-
-  const commentsTemplate = new CommentsView(comments).getTemplate();
 
   const formatedReleaseDate = releaseDate.format(`DD MMMM YYYY`);
 
@@ -111,7 +101,10 @@ const createFilmDetailsCardTemplate = (film) => {
     </div>
 
     <div class="form-details__bottom-container">
-      ${commentsTemplate}
+            <section class="film-details__comments-wrap">
+              <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+              <ul class="film-details__comments-list"></ul>
+            </section>
     </div>
   </form>
   </section>`
@@ -198,5 +191,20 @@ export default class FilmDetails extends SmartView {
     this.getElement()
       .querySelector(`.film-details__control-label--watchlist`)
       .addEventListener(`click`, this._addToWatchlistClickHandler);
+  }
+
+  _setInnerHandlers() {
+    this.setAddToWatchlistClickHandler(this._callback.watchlistClick);
+    this.setAddToFavoritesClickHandler(this._callback.addToFavoritesClick);
+    this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
+    this.setClosePopupClickHandler(this._callback.closePopup);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
+
+  getState() {
+    return this._film;
   }
 }

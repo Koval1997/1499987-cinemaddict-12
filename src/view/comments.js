@@ -1,20 +1,23 @@
 import AbstractView from "./abstract";
+import he from 'he';
 
 export default class Comments extends AbstractView {
-  constructor(comments) {
+  constructor(comment) {
     super();
-    this._comments = comments;
+    this._comment = comment;
+
+    this._deleteButtonClickHandler = this._deleteButtonClickHandler.bind(this);
   }
 
-  createCommentTemplate(comment) {
-    const {emotion, text, author, date} = comment;
+  getTemplate() {
+    const {id, emoji, text, author, date} = this._comment;
 
-    return `<li class="film-details__comment">
+    return `<li class="film-details__comment" id="${id}">
     <span class="film-details__comment-emoji">
-      <img src=${emotion} width="55" height="55" alt="emoji-smile">
+      <img src=/images/emoji/${emoji}.png width="55" height="55" alt="emoji-smile">
     </span>
     <div>
-      <p class="film-details__comment-text">${text}</p>
+      <p class="film-details__comment-text">${he.encode(text)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${author}</span>
         <span class="film-details__comment-day">${date}</span>
@@ -24,19 +27,13 @@ export default class Comments extends AbstractView {
   </li>`;
   }
 
-  createCommentsTemplate(comments) {
-    const commentTemplate = comments.map(this.createCommentTemplate).join(``);
-
-    return `<section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-
-        <ul class="film-details__comments-list">
-          ${commentTemplate}
-        </ul>
-      </section>`;
+  _deleteButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(this._comment);
   }
 
-  getTemplate() {
-    return this.createCommentsTemplate(this._comments);
+  setCommentDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._deleteButtonClickHandler);
   }
 }

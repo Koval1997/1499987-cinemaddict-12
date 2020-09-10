@@ -1,6 +1,6 @@
 {
   "name": "Cinemaddict",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Личный проект «Киноман» от HTML Academy",
   "scripts": {
@@ -20,6 +20,7 @@
     "node": "10"
   },
   "dependencies": {
+    "he": "1.2.0",
     "moment": "2.27.0"
   }
 }
