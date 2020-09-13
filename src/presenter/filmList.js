@@ -72,9 +72,9 @@ export default class FilmListPresenter {
 
     switch (this._currentSortType) {
       case SortTypes.DATE:
-        return films.slice().sort((firstFilm, secondFilm) => sortFilmByPropName(firstFilm, secondFilm, 'releaseDate'));
+        return films.slice().sort((firstFilm, secondFilm) => sortFilmByPropName(firstFilm, secondFilm, `releaseDate`));
       case SortTypes.RATING:
-        return films.slice().sort((firstFilm, secondFilm) => sortFilmByPropName(firstFilm, secondFilm, 'rating'));
+        return films.slice().sort((firstFilm, secondFilm) => sortFilmByPropName(firstFilm, secondFilm, `rating`));
       default:
         return films;
     }
