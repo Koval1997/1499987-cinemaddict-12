@@ -5,26 +5,27 @@ export const Emoji = {
   ANGRY: `angry`
 };
 
-export const UserAction = {
+export const UserActions = {
   UPDATE_FILM_CARD: `UPDATE_FILM`,
   ADD_COMMENT: `ADD_COMMENT`,
   DELETE_COMMENT: `DELETE_COMMENT`
 };
 
-export const FilterType = {
+export const FilterTypes = {
   ALL: `all`,
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`
 };
 
-export const UpdateType = {
+export const UpdateTypes = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 
-export const Mode = {
+export const Modes = {
   DEFAULT: `DEFAULT`,
   POPUP: `POPUP`
 };

@@ -66,3 +66,30 @@ export const updateItem = (items, update) => {
 export const generateId = () => {
   return Date.now() + parseInt(Math.random() * 10000, 10);
 };
+
+export const getProfileRating = (films) => {
+  const watchedFilmsCount = getWatchedFilmsCount(films);
+
+  switch (true) {
+    case (watchedFilmsCount >= 1 && watchedFilmsCount <= 10):
+      return `Novice`;
+    case (watchedFilmsCount >= 11 && watchedFilmsCount <= 20):
+      return `Fan`;
+    case (watchedFilmsCount >= 21):
+      return `Movie Buff`;
+    default:
+      return ``;
+  }
+};
+
+export const getDurationFormat = (duration) => {
+  duration = moment.duration(duration, `minutes`);
+  const hours = `${duration.hours() > 0 ? `${duration.hours()}h` : ``}`;
+  const minutes = `${duration.minutes() > 0 ? `${duration.minutes()}m` : ``}`;
+
+  return `${hours} ${minutes}`;
+};
+
+export const getWatchedFilmsCount = (films) => {
+  return films.filter((film) => film.isWatched).length;
+};

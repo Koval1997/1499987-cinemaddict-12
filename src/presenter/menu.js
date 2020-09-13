@@ -1,6 +1,6 @@
 import MenuView from '../view/site-menu';
 import {render, replace, remove} from '../utils/render';
-import {FilterType, UpdateType} from '../const';
+import {FilterTypes, UpdateTypes} from '../const';
 
 export default class Filter {
   constructor(filterContainer, filterModel, filmsModel) {
@@ -45,7 +45,7 @@ export default class Filter {
       return;
     }
 
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filterModel.setFilter(UpdateTypes.MAJOR, filterType);
   }
 
   _getFilters() {
@@ -53,22 +53,22 @@ export default class Filter {
 
     return [
       {
-        type: FilterType.ALL,
+        type: FilterTypes.ALL,
         name: `All movies`,
         count: ``
       },
       {
-        type: FilterType.WATCHLIST,
+        type: FilterTypes.WATCHLIST,
         name: `Watchlist`,
         count: films.filter((film) => film.isInWatchlist).length
       },
       {
-        type: FilterType.HISTORY,
+        type: FilterTypes.HISTORY,
         name: `History`,
         count: films.filter((film) => film.isWatched).length
       },
       {
-        type: FilterType.FAVORITES,
+        type: FilterTypes.FAVORITES,
         name: `Favorites`,
         count: films.filter((film) => film.isFavorite).length
       }

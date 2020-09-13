@@ -1,6 +1,9 @@
 import AbstractView from "./abstract.js";
+import {getProfileRating} from '../utils/common';
 
-const createUserRankTemplate = (userRank) => {
+const createUserRankTemplate = (films) => {
+  const userRank = getProfileRating(films);
+
   return (
     `<section class="header__profile profile">
       <p class="profile__rating">${userRank}</p>
@@ -10,12 +13,12 @@ const createUserRankTemplate = (userRank) => {
 };
 
 export default class HeaderProfile extends AbstractView {
-  constructor(rank) {
+  constructor(films) {
     super();
-    this._rank = rank;
+    this._films = films;
   }
 
   getTemplate() {
-    return createUserRankTemplate(this._rank);
+    return createUserRankTemplate(this._films);
   }
 }
