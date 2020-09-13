@@ -1,4 +1,5 @@
 import SmartView from "./smart.js";
+import moment from "moment";
 
 const createFilmDetailsCardTemplate = (film) => {
   const {
@@ -21,7 +22,7 @@ const createFilmDetailsCardTemplate = (film) => {
     isFavorite,
   } = film;
 
-  const formatedReleaseDate = releaseDate.format(`DD MMMM YYYY`);
+  const formatedReleaseDate = moment(releaseDate).format(`DD MMMM YYYY`);
 
   return (
     `<section class="film-details">

@@ -1,10 +1,10 @@
 import Observer from '../utils/observer';
-import {FilterType} from '../const';
+import {FilterTypes} from '../const';
 
 export default class Filters extends Observer {
   constructor() {
     super();
-    this._activeFilter = FilterType.ALL;
+    this._activeFilter = FilterTypes.ALL;
   }
 
   setFilter(updateType, filter) {
