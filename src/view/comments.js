@@ -1,5 +1,6 @@
 import AbstractView from "./abstract";
 import he from 'he';
+import moment from "moment";
 
 export default class Comments extends AbstractView {
   constructor(comment) {
@@ -12,6 +13,8 @@ export default class Comments extends AbstractView {
   getTemplate() {
     const {id, emotion, comment, author, date} = this._comment;
 
+    const formattedDate = moment(date).format(`YYYY/MM/DD HH:MM`);
+
     return `<li class="film-details__comment" id="${id}">
     <span class="film-details__comment-emoji">
       <img src=/images/emoji/${emotion}.png width="55" height="55" alt="emoji-smile">
@@ -20,7 +23,7 @@ export default class Comments extends AbstractView {
       <p class="film-details__comment-text">${he.encode(comment)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${author}</span>
-        <span class="film-details__comment-day">${date}</span>
+        <span class="film-details__comment-day">${formattedDate}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
