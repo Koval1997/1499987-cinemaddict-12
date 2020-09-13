@@ -39,6 +39,6 @@ export default class Smart extends AbstractView {
   }
 
   restoreHandlers() {
-    throw new Error(`Abstract method not implemented: restoreHandlers`);
+    throw new Error(`Method restoreHandlers not override`);
   }
 }
