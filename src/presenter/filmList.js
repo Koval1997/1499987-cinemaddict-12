@@ -5,6 +5,9 @@ import LoadingView from '../view/loading';
 import {render, RenderPosition, remove} from '../utils/render';
 import {filter} from '../utils/filter';
 import {UpdateTypes, UserActions} from '../const';
+import SortView from '../view/sort';
+import {SortTypes} from '../const';
+import {sortFilmByPropName} from '../utils/common';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -12,8 +15,11 @@ export default class FilmListPresenter {
   constructor(pageMainElement, filterModel, filmsModel, api) {
     this._isLoading = true;
     this._api = api;
+    this._currentSortType = SortTypes.DEFAULT;
 
     this._loadingComponent = new LoadingView();
+    this._filmsListComponent = new FilmsListView();
+    this._showMoreButtonComponent = new ShowMoreButtonView();
 
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
@@ -21,15 +27,13 @@ export default class FilmListPresenter {
     this._pageMainElement = pageMainElement;
     this._renderedFilmsCount = FILM_COUNT_PER_STEP;
 
-    this._filmsListComponent = new FilmsListView();
-    this._showMoreButtonComponent = new ShowMoreButtonView();
-
     this._filmPresenter = {};
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleChangeFilmMode = this._handleChangeFilmMode.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handlerSortTypeChange = this._handlerSortTypeChange.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -42,11 +46,38 @@ export default class FilmListPresenter {
     this._renderFilmsList();
   }
 
+  _handlerSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._currentSortType = sortType;
+    this._clearFilmsList();
+    this._renderFilmsList();
+  }
+
+  _renderSort() {
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+
+    this._sortComponent = new SortView(this._currentSortType);
+    render(this._filmsListContainer, this._sortComponent, RenderPosition.BEFORE);
+    this._sortComponent.setSortTypeChangeHandler(this._handlerSortTypeChange);
+  }
+
   _getFilms() {
     const filterType = this._filterModel.getFilter();
-    const films = this._filmsModel.getFilms();
+    const films = filter[filterType](this._filmsModel.getFilms());
 
-    return filter[filterType](films);
+    switch (this._currentSortType) {
+      case SortTypes.DATE:
+        return films.slice().sort((firstFilm, secondFilm) => sortFilmByPropName(firstFilm, secondFilm, 'releaseDate'));
+      case SortTypes.RATING:
+        return films.slice().sort((firstFilm, secondFilm) => sortFilmByPropName(firstFilm, secondFilm, 'rating'));
+      default:
+        return films;
+    }
   }
 
   _renderFilmsList() {
@@ -55,6 +86,7 @@ export default class FilmListPresenter {
       return;
     }
 
+    this._renderSort();
     this._renderFilms(0, Math.min(this._getFilms().length, this._renderedFilmsCount));
 
     if (this._getFilms().length > FILM_COUNT_PER_STEP) {
@@ -104,20 +136,28 @@ export default class FilmListPresenter {
   }
 
   _renderShowMoreButton() {
-    render(this._filmsListComponent.getElement().querySelector(`.films-list`), this._showMoreButtonComponent, RenderPosition.BEFOREEND);
+    render(this._filmsListComponent.getElement().querySelector(`.films-list`),
+        this._showMoreButtonComponent,
+        RenderPosition.BEFOREEND);
 
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }
 
-  _clearFilmsList() {
+  _clearFilmsList(isSortTypeReset) {
     Object
       .values(this._filmPresenter)
       .forEach((presenter) => presenter.destroy());
 
+    remove(this._sortComponent);
     remove(this._showMoreButtonComponent);
     remove(this._loadingComponent);
+
     this._filmPresenter = {};
     this._renderedFilmsCount = FILM_COUNT_PER_STEP;
+
+    if (isSortTypeReset) {
+      this._currentSortType = SortTypes.DEFAULT;
+    }
   }
 
   _handleChangeFilmMode() {
@@ -134,7 +174,7 @@ export default class FilmListPresenter {
         this._renderFilmsList();
         break;
       case UpdateTypes.MAJOR:
-        this._clearFilmsList();
+        this._clearFilmsList(true);
         this._renderFilmsList();
         break;
       case UpdateTypes.INIT:
