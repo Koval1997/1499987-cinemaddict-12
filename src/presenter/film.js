@@ -3,19 +3,21 @@ import FilmDetailsView from '../view/film-details';
 import CommentsModel from '../model/comments';
 import CommentListPresenter from './comments-list';
 import {render, RenderPosition, remove, replace} from '../utils/render';
-import {Mode, UserAction, UpdateType} from '../const';
+import {Modes, UserActions, UpdateTypes} from '../const';
 
 export default class FilmPresenter {
-  constructor(filmsListContainer, onChangeData, onChangeMode) {
+  constructor(filmsListContainer, onChangeData, onChangeModes, api) {
     this._filmsListContainer = filmsListContainer;
+
+    this._api = api;
 
     this._filmComponent = null;
     this._filmDetailComponent = null;
     this._commentListPresenter = null;
-    this._mode = Mode.DEFAULT;
+    this._mode = Modes.DEFAULT;
 
     this._onChangeData = onChangeData;
-    this._onChangeMode = onChangeMode;
+    this._onChangeModes = onChangeModes;
 
     this._handleShowDetailsClick = this._handleShowDetailsClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
@@ -54,10 +56,6 @@ export default class FilmPresenter {
       return;
     }
 
-    if (prevFilmDetailComponent !== null) {
-      this._initComments();
-    }
-
     replace(this._filmComponent, prevFilmComponent);
     replace(this._filmDetailComponent, prevFilmDetailComponent);
 
@@ -67,8 +65,8 @@ export default class FilmPresenter {
 
   _handleShowDetailsClick() {
     render(this._filmsListContainer, this._filmDetailComponent, RenderPosition.BEFOREEND);
-    this._onChangeMode();
-    this._mode = Mode.POPUP;
+    this._onChangeModes();
+    this._mode = Modes.POPUP;
 
     this._initComments();
 
@@ -82,18 +80,18 @@ export default class FilmPresenter {
     this._newCommentContainer = this._filmDetailComponent.getElement().querySelector(`.film-details__comments-wrap`);
 
     this._commentListPresenter = new CommentListPresenter(this._commentsContainer, this._newCommentContainer, this._film, this._handleCommentListUpdate, this._commentsModel);
-    this._commentListPresenter.init(this._film.comments);
+    this._api.getComments(this._film.id)
+      .then((comments) => this._commentListPresenter.init(comments));
   }
 
   destroy() {
     remove(this._filmComponent);
-    this._destroyDetailsComponent();
   }
 
   _handleCommentListUpdate() {
     this._onChangeData(
-        UserAction.UPDATE_FILM_CARD,
-        UpdateType.PATCH,
+        UserActions.UPDATE_FILM_CARD,
+        UpdateTypes.PATCH,
         Object.assign(
             {},
             this._film,
@@ -106,8 +104,8 @@ export default class FilmPresenter {
 
   _handleAddToFavoritesClick() {
     this._onChangeData(
-        UserAction.UPDATE_FILM_CARD,
-        UpdateType.PATCH,
+        UserActions.UPDATE_FILM_CARD,
+        UpdateTypes.PATCH,
         Object.assign(
             {},
             this._film,
@@ -119,8 +117,8 @@ export default class FilmPresenter {
 
   _handleAlreadyWatchedClick() {
     this._onChangeData(
-        UserAction.UPDATE_FILM_CARD,
-        UpdateType.PATCH,
+        UserActions.UPDATE_FILM_CARD,
+        UpdateTypes.PATCH,
         Object.assign(
             {},
             this._film,
@@ -132,8 +130,8 @@ export default class FilmPresenter {
 
   _handleAddToWatchlistClick() {
     this._onChangeData(
-        UserAction.UPDATE_FILM_CARD,
-        UpdateType.PATCH,
+        UserActions.UPDATE_FILM_CARD,
+        UpdateTypes.PATCH,
         Object.assign(
             {},
             this._film,
@@ -152,7 +150,7 @@ export default class FilmPresenter {
   _handleClosePopupClick() {
     this._destroyDetailsComponent();
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
-    this._mode = Mode.DEFAULT;
+    this._mode = Modes.DEFAULT;
     this._commentListPresenter.destroy();
     this._commentListPresenter = null;
   }
@@ -160,13 +158,13 @@ export default class FilmPresenter {
   _destroyDetailsComponent() {
     const filmPrevState = this._filmDetailComponent.getState();
 
-    this._onChangeData(UserAction.UPDATE_FILM_CARD, UpdateType.PATCH, filmPrevState);
+    this._onChangeData(UserActions.UPDATE_FILM_CARD, UpdateTypes.PATCH, filmPrevState);
 
     remove(this._filmDetailComponent);
   }
 
   resetView() {
-    if (this._mode === Mode.POPUP) {
+    if (this._mode === Modes.POPUP) {
       this._handleClosePopupClick();
     }
   }

@@ -1,4 +1,6 @@
 import AbstractView from "./abstract.js";
+import moment from "moment";
+import {getDurationFormat} from '../utils/common';
 
 const createFilmCardTemplate = (film) => {
   const {
@@ -11,10 +13,11 @@ const createFilmCardTemplate = (film) => {
     comments,
     isInWatchlist,
     isWatched,
-    isFavorite
+    isFavorite,
+    genres
   } = film;
 
-  const releaseYear = releaseDate.format(`YYYY`);
+  const releaseYear = moment(releaseDate).format(`YYYY`);
   const commentsCount = comments.length;
 
   let descriptionText = description;
@@ -23,14 +26,16 @@ const createFilmCardTemplate = (film) => {
     descriptionText = description.slice(0, 138).concat(`...`);
   }
 
+  const formattedDuration = getDurationFormat(duration);
+
   return (
     `<article class="film-card">
         <h3 class="film-card__title">${name}</h3>
         <p class="film-card__rating">${rating}</p>
         <p class="film-card__info">
           <span class="film-card__year">${releaseYear}</span>
-          <span class="film-card__duration">${duration}</span>
-          <span class="film-card__genre">Musical</span>
+          <span class="film-card__duration">${formattedDuration}</span>
+          <span class="film-card__genre">${genres.length ? genres[0] : ``}</span>
         </p>
         <img src=${posterSrc} alt="" class="film-card__poster">
         <p class="film-card__description">${descriptionText}</p>

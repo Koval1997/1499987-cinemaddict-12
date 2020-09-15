@@ -1,7 +1,7 @@
 import CommentPresenter from './comment';
 import NewCommentView from '../view/new-comment';
 import {appendChild, remove} from '../utils/render';
-import {UserAction, UpdateType} from '../const';
+import {UserActions, UpdateTypes} from '../const';
 
 export default class CommentList {
   constructor(commentsContainer, newCommentContainer, film, onChangeData, commentsModel) {
@@ -33,12 +33,12 @@ export default class CommentList {
   }
 
   _handleCommentDeleteClick(comment) {
-    this._commentsModel.deleteComment(UpdateType.PATCH, comment);
+    this._commentsModel.deleteComment(UpdateTypes.PATCH, comment);
     this._commentPresenter[comment.id].destroy();
 
     this._onChangeData(
-        UserAction.DELETE_COMMENT,
-        UpdateType.PATCH,
+        UserActions.DELETE_COMMENT,
+        UpdateTypes.PATCH,
         Object.assign(
             {},
             this._film,
@@ -50,11 +50,11 @@ export default class CommentList {
   }
 
   _handleCommentSubmit() {
-    this._commentsModel.addComment(UpdateType.PATCH, this._newCommentComponent.getNewComment());
+    this._commentsModel.addComment(UpdateTypes.PATCH, this._newCommentComponent.getNewComment());
 
     this._onChangeData(
-        UserAction.UPDATE_FILM_CARD,
-        UpdateType.PATCH,
+        UserActions.UPDATE_FILM_CARD,
+        UpdateTypes.PATCH,
         Object.assign(
             {},
             this._film,
