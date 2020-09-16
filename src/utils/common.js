@@ -67,7 +67,7 @@ export const generateId = () => {
   return Date.now() + parseInt(Math.random() * 10000, 10);
 };
 
-export const getProfileRating = (films) => {
+export const getUserRank = (films) => {
   const watchedFilmsCount = getWatchedFilmsCount(films);
 
   switch (true) {

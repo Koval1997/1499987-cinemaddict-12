@@ -1,12 +1,15 @@
 import AbstractView from './abstract.js';
+import {PageModes} from '../const';
 
 export default class SiteMenu extends AbstractView {
-  constructor(filters, currentFilterType) {
+  constructor(filters, currentFilterType, pageMode) {
     super();
     this._filters = filters;
     this._currentFilterType = currentFilterType;
+    this._pageMode = pageMode;
 
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
+    this._statisticsClickHandler = this._statisticsClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -29,7 +32,7 @@ export default class SiteMenu extends AbstractView {
         <div class="main-navigation__items">
           ${filtersTemplate}
         </div>
-        <a href="#stats" class="main-navigation__additional">Stats</a>
+        <a href="#stats" class="main-navigation__additional" ${this._pageMode === PageModes.STATISTICS ? `main-navigation__additional--active` : ``}>Stats</a>
       </nav>`
     );
   }
@@ -42,5 +45,15 @@ export default class SiteMenu extends AbstractView {
   setFilterChangeHandler(callback) {
     this._callback.filterChange = callback;
     this.getElement().addEventListener(`click`, this._filterChangeHandler);
+  }
+
+  _statisticsClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.statisticsClick();
+  }
+
+  setStatisticsClickHandler(callback) {
+    this._callback.statisticsClick = callback;
+    this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statisticsClickHandler);
   }
 }

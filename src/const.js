@@ -35,3 +35,16 @@ export const SortTypes = {
   DATE: `date`,
   RATING: `rating`
 };
+
+export const StatisticPeriods = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
+export const PageModes = {
+  FILMS: `FILMS`,
+  STATISTICS: `STATISTICS`
+};
