@@ -1,6 +1,6 @@
 import FilmCardView from '../view/film-card';
 import FilmDetailsView from '../view/film-details';
-import CommentsModesl from '../model/comments';
+import CommentsModel from '../model/comments';
 import CommentListPresenter from './comments-list';
 import {render, RenderPosition, remove, replace} from '../utils/render';
 import {Modes, UserActions, UpdateTypes} from '../const';
@@ -29,12 +29,12 @@ export default class FilmPresenter {
 
     this._bodyElement = document.body;
 
-    this._commentsModesl = new CommentsModesl();
+    this._commentsModel = new CommentsModel();
   }
 
   init(film) {
     this._film = film;
-    this._commentsModesl.setComments(this._film.comments);
+    this._commentsModel.setComments(this._film.comments);
 
     const prevFilmComponent = this._filmComponent;
     const prevFilmDetailComponent = this._filmDetailComponent;
@@ -54,10 +54,6 @@ export default class FilmPresenter {
     if (prevFilmComponent === null || prevFilmDetailComponent === null) {
       render(this._filmsListContainer, this._filmComponent, RenderPosition.BEFOREEND);
       return;
-    }
-
-    if (prevFilmDetailComponent !== null) {
-      this._initComments();
     }
 
     replace(this._filmComponent, prevFilmComponent);
@@ -83,7 +79,7 @@ export default class FilmPresenter {
     this._commentsContainer = this._filmDetailComponent.getElement().querySelector(`.film-details__comments-list`);
     this._newCommentContainer = this._filmDetailComponent.getElement().querySelector(`.film-details__comments-wrap`);
 
-    this._commentListPresenter = new CommentListPresenter(this._commentsContainer, this._newCommentContainer, this._film, this._handleCommentListUpdate, this._commentsModesl);
+    this._commentListPresenter = new CommentListPresenter(this._commentsContainer, this._newCommentContainer, this._film, this._handleCommentListUpdate, this._commentsModel);
     this._api.getComments(this._film.id)
       .then((comments) => this._commentListPresenter.init(comments));
   }
@@ -100,7 +96,7 @@ export default class FilmPresenter {
             {},
             this._film,
             {
-              comments: this._commentsModesl.getComments()
+              comments: this._commentsModel.getComments()
             }
         )
     );
