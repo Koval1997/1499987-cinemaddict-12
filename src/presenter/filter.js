@@ -1,6 +1,6 @@
 import MenuView from '../view/site-menu';
-import {render, replace, remove, RenderPosition} from '../utils/render';
-import {FilterTypes, UpdateTypes, PageModes} from '../const';
+import { render, replace, remove, RenderPosition } from '../utils/render';
+import { FilterTypes, UpdateTypes, PageModes } from '../const';
 
 export default class Filter {
   constructor(filterContainer, filterModel, filmsModel, filmListPresenter, statisticsPresenter, pageModeModel) {
@@ -26,7 +26,6 @@ export default class Filter {
   }
 
   init() {
-    console.log(this._filterModel);
     this._currentFilter = this._filterModel.getFilter();
 
     const filters = this._getFilters();

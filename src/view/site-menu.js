@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import {PageModes} from '../const';
+import { PageModes } from '../const';
 
 export default class SiteMenu extends AbstractView {
   constructor(filters, currentFilterType, pageMode) {
@@ -19,20 +19,24 @@ export default class SiteMenu extends AbstractView {
   _createFilterTemplate(filter) {
     const {type, name, count} = filter;
 
+    const className = this._currentFilterType === type && this._pageMode !== PageModes.STATISTICS ? `main-navigation__item--active` : ``;
+
     return (
-      `<a href="#${type}" id=${type} class="main-navigation__item ${this._currentFilterType === type ? `main-navigation__item--active` : ``}">${name} ${name !== `All movies` ? `<span class="main-navigation__item-count">${count}</span>` : ``}</a>`
+      `<a href="#${type}" id=${type} class="main-navigation__item ${className}">${name} ${name !== `All movies` ? `<span class="main-navigation__item-count">${count}</span>` : ``}</a>`
     );
   }
 
   _createMenuTemplate(filters) {
     const filtersTemplate = filters.map((filter) => this._createFilterTemplate(filter)).join(``);
 
+    const className = this._pageMode === PageModes.STATISTICS ? `main-navigation__additional--active` : ``;
+
     return (
       `<nav class="main-navigation">
         <div class="main-navigation__items">
           ${filtersTemplate}
         </div>
-        <a href="#stats" class="main-navigation__additional" ${this._pageMode === PageModes.STATISTICS ? `main-navigation__additional--active` : ``}>Stats</a>
+        <a href="#stats" class="main-navigation__additional ${className}">Stats</a>
       </nav>`
     );
   }
@@ -44,7 +48,7 @@ export default class SiteMenu extends AbstractView {
 
   setFilterChangeHandler(callback) {
     this._callback.filterChange = callback;
-    this.getElement().addEventListener(`click`, this._filterChangeHandler);
+    this.getElement().querySelector(`.main-navigation__items`).addEventListener(`click`, this._filterChangeHandler);
   }
 
   _statisticsClickHandler(evt) {
