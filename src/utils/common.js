@@ -93,3 +93,14 @@ export const getDurationFormat = (duration) => {
 export const getWatchedFilmsCount = (films) => {
   return films.filter((film) => film.isWatched).length;
 };
+
+export const sortFilmByPropName = (firstFilm, secondFilm, propName) => {
+  if (firstFilm[propName] > secondFilm[propName]) {
+    return -1;
+  }
+  if (firstFilm[propName] < secondFilm[propName]) {
+    return 1;
+  }
+
+  return 0;
+};

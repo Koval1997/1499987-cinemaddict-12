@@ -29,3 +29,9 @@ export const Modes = {
   DEFAULT: `DEFAULT`,
   POPUP: `POPUP`
 };
+
+export const SortTypes = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
+};
