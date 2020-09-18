@@ -34,9 +34,6 @@ export default class FilmListPresenter {
     this._handleChangeFilmMode = this._handleChangeFilmMode.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handlerSortTypeChange = this._handlerSortTypeChange.bind(this);
-
-    this._filmsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -44,6 +41,25 @@ export default class FilmListPresenter {
     render(this._pageMainElement, this._filmsListComponent, RenderPosition.BEFOREEND);
 
     this._renderFilmsList();
+
+    this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+  }
+
+  _handlerSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._currentSortType = sortType;
+    this._clearFilmsList();
+    this._renderFilmsList();
+  }
+
+  _renderSort() {
+    this._sortComponent = new SortView(this._currentSortType);
+    render(this._filmsListContainer, this._sortComponent, RenderPosition.BEFORE);
+    this._sortComponent.setSortTypeChangeHandler(this._handlerSortTypeChange);
   }
 
   _handlerSortTypeChange(sortType) {
@@ -183,5 +199,14 @@ export default class FilmListPresenter {
         this._renderFilmsList();
         break;
     }
+  }
+
+  destroy() {
+    this._clearFilmsList(true);
+
+    remove(this._filmsListComponent);
+
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 }

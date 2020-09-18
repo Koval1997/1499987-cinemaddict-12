@@ -1,8 +1,8 @@
 import AbstractView from "./abstract.js";
-import {getProfileRating} from '../utils/common';
+import {getUserRank} from '../utils/common';
 
 const createUserRankTemplate = (films) => {
-  const userRank = getProfileRating(films);
+  const userRank = getUserRank(films);
 
   return (
     `<section class="header__profile profile">
