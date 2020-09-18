@@ -62,6 +62,26 @@ export default class FilmListPresenter {
     this._sortComponent.setSortTypeChangeHandler(this._handlerSortTypeChange);
   }
 
+  _handlerSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._currentSortType = sortType;
+    this._clearFilmsList();
+    this._renderFilmsList();
+  }
+
+  _renderSort() {
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+
+    this._sortComponent = new SortView(this._currentSortType);
+    render(this._filmsListContainer, this._sortComponent, RenderPosition.BEFORE);
+    this._sortComponent.setSortTypeChangeHandler(this._handlerSortTypeChange);
+  }
+
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const films = filter[filterType](this._filmsModel.getFilms());
