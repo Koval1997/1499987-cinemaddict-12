@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { PageModes } from '../const';
+import {PageModes} from '../const';
 
 export default class SiteMenu extends AbstractView {
   constructor(filters, currentFilterType, pageMode) {

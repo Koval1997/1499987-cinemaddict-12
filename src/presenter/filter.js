@@ -1,6 +1,6 @@
 import MenuView from '../view/site-menu';
-import { render, replace, remove, RenderPosition } from '../utils/render';
-import { FilterTypes, UpdateTypes, PageModes } from '../const';
+import {render, replace, remove, RenderPosition} from '../utils/render';
+import {FilterTypes, UpdateTypes, PageModes} from '../const';
 
 export default class Filter {
   constructor(filterContainer, filterModel, filmsModel, filmListPresenter, statisticsPresenter, pageModeModel) {
@@ -50,11 +50,6 @@ export default class Filter {
       this._statisticsPresenter.init();
       this._filmListPresenter.destroy();
       this._pageModeModel.setMode(UpdateTypes.MAJOR, this._pageMode);
-    } else {
-      this._pageMode = PageModes.FILMS;
-      this._statisticsPresenter.destroy();
-      this._filmListPresenter.init();
-      this._pageModeModel.setMode(UpdateTypes.MAJOR, this._pageMode);
     }
   }
 
@@ -63,8 +58,11 @@ export default class Filter {
   }
 
   _handleFilterChange(filterType) {
-    if (this._currentFilter === filterType) {
-      return;
+    if (this._pageMode === PageModes.STATISTICS) {
+      this._pageMode = PageModes.FILMS;
+      this._statisticsPresenter.destroy();
+      this._filmListPresenter.init();
+      this._pageModeModel.setMode(UpdateTypes.MAJOR, this._pageMode);
     }
 
     this._filterModel.setFilter(UpdateTypes.MAJOR, filterType);
