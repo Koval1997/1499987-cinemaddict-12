@@ -34,7 +34,7 @@ export default class CommentList {
 
   _handleCommentDeleteClick(comment) {
     this._commentsModel.deleteComment(UpdateTypes.PATCH, comment);
-    this._commentPresenter[comment.id].destroy();
+    this._commentPresenter[comment.id].setDeletingState();
 
     this._onChangeData(
         UserActions.DELETE_COMMENT,
@@ -45,23 +45,20 @@ export default class CommentList {
             {
               comments: this._commentsModel.getComments()
             }
-        )
+        ),
+        comment
     );
   }
 
   _handleCommentSubmit() {
-    this._commentsModel.addComment(UpdateTypes.PATCH, this._newCommentComponent.getNewComment());
+    this._newCommentComponent.blockForm();
+    const newComment = this._newCommentComponent.getNewComment();
 
     this._onChangeData(
-        UserActions.UPDATE_FILM_CARD,
+        UserActions.ADD_COMMENT,
         UpdateTypes.PATCH,
-        Object.assign(
-            {},
-            this._film,
-            {
-              comments: this._commentsModel.getComments()
-            }
-        )
+        this._film,
+        newComment
     );
   }
 
@@ -78,8 +75,19 @@ export default class CommentList {
     remove(this._newCommentComponent);
 
     Object
-        .values(this._commentPresenter)
-        .forEach((presenter) => presenter.destroy());
+      .values(this._commentPresenter)
+      .forEach((presenter) => presenter.destroy());
     this._commentPresenter = {};
+  }
+
+  onFailure(actionType, comment) {
+    switch (actionType) {
+      case UserActions.ADD_COMMENT:
+        this._newCommentComponent.onFailure();
+        break;
+      case UserActions.DELETE_COMMENT:
+        this._commentPresenter[comment.id].onFailure();
+        break;
+    }
   }
 }

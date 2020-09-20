@@ -24,6 +24,7 @@
     "chartjs-plugin-datalabels": "0.7.0",
     "he": "1.2.0",
     "lodash": "4.17.20",
+    "moment": "2.27.0",
     "moment-locales-webpack-plugin": "^1.2.0"
   }
 }

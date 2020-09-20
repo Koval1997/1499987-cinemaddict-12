@@ -1,5 +1,6 @@
 import CommentsView from '../view/comments';
 import {remove, appendChild} from '../utils/render';
+import {shake} from '../utils/common';
 
 export default class Comment {
   constructor(commentsContainer, onDeleteComment) {
@@ -24,7 +25,20 @@ export default class Comment {
     );
   }
 
+  setDeletingState() {
+    return this._commentComponent.setDeletingState();
+  }
+
+  setDeleteState() {
+    return this._commentComponent.setDeleteState();
+  }
+
   destroy() {
     remove(this._commentComponent);
+  }
+
+  onFailure() {
+    shake(this._commentComponent);
+    this._commentComponent.setDeleteState();
   }
 }
