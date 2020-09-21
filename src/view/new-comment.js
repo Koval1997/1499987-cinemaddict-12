@@ -1,7 +1,7 @@
-import SmartView from "./smart.js";
-import moment from "moment";
+import SmartView from './smart.js';
+import moment from 'moment';
 import {Emoji} from '../const';
-import {shake} from '../utils/common';
+import {shakeElement} from '../utils/common';
 
 export default class NewComment extends SmartView {
   constructor() {
@@ -19,11 +19,7 @@ export default class NewComment extends SmartView {
     this._setInnerHandlers();
   }
 
-  createImgTemplate() {
-    return `<img src="images/emoji/${this._data.emoji}.png" width="55" height="55" alt="emoji-${this._data.emoji}">`;
-  }
-
-  _createCommentsSectionTemplate() {
+  getTemplate() {
     const {emoji} = this._data;
 
     return `<div class="film-details__new-comment">
@@ -59,51 +55,6 @@ export default class NewComment extends SmartView {
       </div>`;
   }
 
-  createTemplate() {
-    const emojiListTemplate = this.createEmojiListTemplate();
-    return `<div class="film-details__new-comment">
-        <div for="add-emoji" class="film-details__add-emoji-label">
-          ${this._data.emoji ? this.createImgTemplate() : ``}
-        </div>
-
-        <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-        </label>
-
-        <div class="film-details__emoji-list">
-          ${emojiListTemplate}
-        </div>
-      </div>`;
-  }
-
-  getTemplate() {
-    return this._createCommentsSectionTemplate(this._data);
-  }
-
-  _emojiToggleHandler(evt) {
-    evt.preventDefault();
-    this.updateData({
-      emoji: evt.target.value
-    });
-  }
-
-  _inputCommentTextHandler(evt) {
-    evt.preventDefault();
-    this.updateData({
-      text: evt.target.value
-    }, true);
-  }
-
-  _setInnerHandlers() {
-    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiToggleHandler);
-    this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`input`, this._inputCommentTextHandler);
-  }
-
-  _destroyHandlers() {
-    this.getElement().querySelector(`.film-details__emoji-list`).removeEventListener(`change`, this._emojiToggleHandler);
-    this.getElement().querySelector(`.film-details__comment-input`).removeEventListener(`input`, this._inputCommentTextHandler);
-  }
-
   reset() {
     this._data = null;
     this.getElement().querySelector(`.film-details__add-emoji-label`).innerHTML = ``;
@@ -127,16 +78,14 @@ export default class NewComment extends SmartView {
     );
   }
 
-  _commentSubmitHandler(evt) {
-    if (evt.ctrlKey && evt.key === `Enter`) {
-      evt.preventDefault();
-      this._callback.createComment();
-    }
-  }
-
   setSubmitCommentHandler(callback) {
     this._callback.createComment = callback;
     this.getElement().addEventListener(`keydown`, this._commentSubmitHandler);
+  }
+
+  applyAddFailureEffect() {
+    shakeElement(this);
+    this._unblockForm();
   }
 
   blockForm() {
@@ -153,8 +102,34 @@ export default class NewComment extends SmartView {
     });
   }
 
-  onFailure() {
-    shake(this);
-    this._unblockForm();
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiToggleHandler);
+    this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`input`, this._inputCommentTextHandler);
+  }
+
+  _destroyHandlers() {
+    this.getElement().querySelector(`.film-details__emoji-list`).removeEventListener(`change`, this._emojiToggleHandler);
+    this.getElement().querySelector(`.film-details__comment-input`).removeEventListener(`input`, this._inputCommentTextHandler);
+  }
+
+  _emojiToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      emoji: evt.target.value
+    });
+  }
+
+  _inputCommentTextHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      text: evt.target.value
+    }, true);
+  }
+
+  _commentSubmitHandler(evt) {
+    if (evt.ctrlKey && evt.key === `Enter`) {
+      evt.preventDefault();
+      this._callback.createComment();
+    }
   }
 }

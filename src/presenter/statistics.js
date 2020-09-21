@@ -1,7 +1,8 @@
 import StatisticsView from '../view/statistics';
-import {render, remove, RenderPosition} from '../utils/render';
+import {render, remove} from '../utils/render';
+import {RenderPositions} from '../const';
 
-export default class Statistics {
+export default class StatisticsPresenter {
   constructor(statisticsContainer, filmsModel) {
     this._statisticsContainer = statisticsContainer;
     this._filmsModel = filmsModel;
@@ -9,7 +10,7 @@ export default class Statistics {
 
   init() {
     this._statisticsComponent = new StatisticsView(this._filmsModel.getFilms());
-    render(this._statisticsContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
+    render(this._statisticsContainer, this._statisticsComponent, RenderPositions.BEFOREEND);
     this._statisticsComponent.restoreHandlers();
   }
 

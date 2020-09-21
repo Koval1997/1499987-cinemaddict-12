@@ -1,8 +1,4 @@
-import AbstractView from "./abstract";
-
-const createNoFilmTemplate = () => {
-  return `<h2 class="films-list__title">There are no movies in our database</h2>`;
-};
+import AbstractView from './abstract';
 
 export default class NoFilm extends AbstractView {
   constructor() {
@@ -10,6 +6,6 @@ export default class NoFilm extends AbstractView {
   }
 
   getTemplate() {
-    return createNoFilmTemplate();
+    return `<h2 class="films-list__title">There are no movies in our database</h2>`;
   }
 }

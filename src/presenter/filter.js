@@ -1,8 +1,8 @@
 import MenuView from '../view/site-menu';
-import {render, replace, remove, RenderPosition} from '../utils/render';
-import {FilterTypes, UpdateTypes, PageModes} from '../const';
+import {render, replace, remove} from '../utils/render';
+import {FilterTypes, UpdateTypes, PageModes, RenderPositions} from '../const';
 
-export default class Filter {
+export default class FilterPresenter {
   constructor(filterContainer, filterModel, filmsModel, filmListPresenter, statisticsPresenter, pageModeModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
@@ -36,36 +36,12 @@ export default class Filter {
     this._filterComponent.setStatisticsClickHandler(this._handleStatisticsClick);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
+      render(this._filterContainer, this._filterComponent, RenderPositions.AFTERBEGIN);
       return;
     }
 
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
-  }
-
-  _handleStatisticsClick() {
-    if (this._pageMode === PageModes.FILMS) {
-      this._pageMode = PageModes.STATISTICS;
-      this._statisticsPresenter.init();
-      this._filmListPresenter.destroy();
-      this._pageModeModel.setMode(UpdateTypes.MAJOR, this._pageMode);
-    }
-  }
-
-  _handleModelEvent() {
-    this.init();
-  }
-
-  _handleFilterChange(filterType) {
-    if (this._pageMode === PageModes.STATISTICS) {
-      this._pageMode = PageModes.FILMS;
-      this._statisticsPresenter.destroy();
-      this._filmListPresenter.init();
-      this._pageModeModel.setMode(UpdateTypes.MAJOR, this._pageMode);
-    }
-
-    this._filterModel.setFilter(UpdateTypes.MAJOR, filterType);
   }
 
   _getFilters() {
@@ -93,5 +69,29 @@ export default class Filter {
         count: films.filter((film) => film.isFavorite).length
       }
     ];
+  }
+
+  _handleStatisticsClick() {
+    if (this._pageMode === PageModes.FILMS) {
+      this._pageMode = PageModes.STATISTICS;
+      this._statisticsPresenter.init();
+      this._filmListPresenter.destroy();
+      this._pageModeModel.setMode(UpdateTypes.MAJOR, this._pageMode);
+    }
+  }
+
+  _handleModelEvent() {
+    this.init();
+  }
+
+  _handleFilterChange(filterType) {
+    if (this._pageMode === PageModes.STATISTICS) {
+      this._pageMode = PageModes.FILMS;
+      this._statisticsPresenter.destroy();
+      this._filmListPresenter.init();
+      this._pageModeModel.setMode(UpdateTypes.MAJOR, this._pageMode);
+    }
+
+    this._filterModel.setFilter(UpdateTypes.MAJOR, filterType);
   }
 }

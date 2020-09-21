@@ -1,11 +1,10 @@
 import CommentsView from '../view/comments';
 import {remove, appendChild} from '../utils/render';
-import {shake} from '../utils/common';
+import {shakeElement} from '../utils/common';
 
-export default class Comment {
+export default class CommentPresenter {
   constructor(commentsContainer, onDeleteComment) {
     this._commentsContainer = commentsContainer;
-    this._comment = null;
     this._onDeleteComment = onDeleteComment;
     this._handleCommentDeleteClick = this._handleCommentDeleteClick.bind(this);
   }
@@ -13,16 +12,8 @@ export default class Comment {
   init(comment) {
     this._comment = comment;
     this._commentComponent = new CommentsView(this._comment);
-
     this._commentComponent.setCommentDeleteClickHandler(this._handleCommentDeleteClick);
-
     appendChild(this._commentsContainer, this._commentComponent);
-  }
-
-  _handleCommentDeleteClick() {
-    this._onDeleteComment(
-        this._comment
-    );
   }
 
   setDeletingState() {
@@ -37,8 +28,14 @@ export default class Comment {
     remove(this._commentComponent);
   }
 
-  onFailure() {
-    shake(this._commentComponent);
+  applyDeleteFailureEffect() {
+    shakeElement(this._commentComponent);
     this._commentComponent.setDeleteState();
+  }
+
+  _handleCommentDeleteClick() {
+    this._onDeleteComment(
+        this._comment
+    );
   }
 }

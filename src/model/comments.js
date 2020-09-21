@@ -1,8 +1,9 @@
-import Observer from "../utils/observer.js";
+import Observer from '../utils/observer.js';
 
-export default class Comments extends Observer {
+export default class CommentsModel extends Observer {
   constructor() {
     super();
+
     this._comments = [];
   }
 
@@ -14,17 +15,17 @@ export default class Comments extends Observer {
     return this._comments;
   }
 
-  addComment(updateType, update) {
+  addComment(updateType, comment) {
     this._comments = [
-      update,
+      comment,
       ...this._comments
     ];
 
-    this._notify(updateType, update);
+    this._notify(updateType, comment);
   }
 
-  deleteComment(updateType, update) {
-    const index = this._comments.findIndex((comment) => comment.id === update.id);
+  deleteComment(updateType, updatedComment) {
+    const index = this._comments.findIndex((comment) => comment.id === updatedComment.id);
 
     if (index === -1) {
       throw new Error(`Comment is not exists`);
@@ -35,6 +36,6 @@ export default class Comments extends Observer {
       ...this._comments.slice(index + 1)
     ];
 
-    this._notify(updateType, update);
+    this._notify(updateType, updatedComment);
   }
 }

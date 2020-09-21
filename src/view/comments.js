@@ -1,4 +1,4 @@
-import AbstractView from "./abstract";
+import AbstractView from './abstract';
 import he from 'he';
 import moment from "moment";
 
@@ -35,11 +35,6 @@ export default class Comments extends AbstractView {
   </li>`;
   }
 
-  _deleteButtonClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.deleteClick(this._comment);
-  }
-
   setDeletingState() {
     const deleteButton = this.getElement().querySelector(`.film-details__comment-delete`);
     deleteButton.textContent = DeleteButtonTexts.DELETING;
@@ -55,5 +50,10 @@ export default class Comments extends AbstractView {
   setCommentDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._deleteButtonClickHandler);
+  }
+
+  _deleteButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(this._comment);
   }
 }

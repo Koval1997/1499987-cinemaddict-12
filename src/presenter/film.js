@@ -2,8 +2,8 @@ import FilmCardView from '../view/film-card';
 import FilmDetailsView from '../view/film-details';
 import CommentsModel from '../model/comments';
 import CommentListPresenter from './comments-list';
-import {render, RenderPosition, remove, replace} from '../utils/render';
-import {Modes, UserActions, UpdateTypes} from '../const';
+import {render, remove, replace} from '../utils/render';
+import {Modes, UserActions, UpdateTypes, RenderPositions} from '../const';
 
 export default class FilmPresenter {
   constructor(filmsListContainer, onChangeData, onChangeModes, api) {
@@ -56,7 +56,7 @@ export default class FilmPresenter {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
 
     if (prevFilmComponent === null || prevFilmDetailComponent === null) {
-      render(this._filmsListContainer, this._filmComponent, RenderPosition.BEFOREEND);
+      render(this._filmsListContainer, this._filmComponent, RenderPositions.BEFOREEND);
       return;
     }
 
@@ -71,18 +71,26 @@ export default class FilmPresenter {
     remove(prevFilmDetailComponent);
   }
 
-  _handleShowDetailsClick() {
-    render(this._filmsListContainer, this._filmDetailComponent, RenderPosition.BEFOREEND);
-    this._onChangeModes();
-    this._mode = Modes.POPUP;
+  destroy() {
+    remove(this._filmComponent);
+  }
 
-    if (!this._commentListPresenter) {
-      this._initComments();
+  resetView() {
+    if (this._mode === Modes.POPUP) {
+      this._handleClosePopupClick();
     }
+  }
 
-    this._filmDetailComponent.setClosePopupClickHandler(this._handleClosePopupClick);
-    this._filmDetailComponent.restoreHandlers();
-    document.addEventListener(`keydown`, this._escKeyDownHandler);
+  applyCommentActionFailure(actionType, comment) {
+    this._commentListPresenter.applyCommentActionFailure(actionType, comment);
+  }
+
+  _destroyDetailsComponent() {
+    const filmPrevState = this._filmDetailComponent.getState();
+
+    this._onChangeData(UserActions.UPDATE_FILM_CARD, UpdateTypes.PATCH, filmPrevState);
+
+    remove(this._filmDetailComponent);
   }
 
   _initComments() {
@@ -94,8 +102,18 @@ export default class FilmPresenter {
       .then((comments) => this._commentListPresenter.init(comments));
   }
 
-  destroy() {
-    remove(this._filmComponent);
+  _handleShowDetailsClick() {
+    render(this._filmsListContainer, this._filmDetailComponent, RenderPositions.BEFOREEND);
+    this._onChangeModes();
+    this._mode = Modes.POPUP;
+
+    if (!this._commentListPresenter) {
+      this._initComments();
+    }
+
+    this._filmDetailComponent.setClosePopupClickHandler(this._handleClosePopupClick);
+    this._filmDetailComponent.restoreHandlers();
+    document.addEventListener(`keydown`, this._escKeyDownHandler);
   }
 
   _handleCommentListUpdate(userAction, updateTypes, film, newComment) {
@@ -146,12 +164,6 @@ export default class FilmPresenter {
         ));
   }
 
-  _escKeyDownHandler(evt) {
-    if (evt.key === `Escape` || evt.key === `Esc` || evt.code === 27) {
-      this._handleClosePopupClick();
-    }
-  }
-
   _handleClosePopupClick() {
     this._destroyDetailsComponent();
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
@@ -160,20 +172,8 @@ export default class FilmPresenter {
     this._mode = Modes.DEFAULT;
   }
 
-  _destroyDetailsComponent() {
-    const filmPrevState = this._filmDetailComponent.getState();
-
-    this._onChangeData(UserActions.UPDATE_FILM_CARD, UpdateTypes.PATCH, filmPrevState);
-
-    remove(this._filmDetailComponent);
-  }
-
-  onFailure(actionType, comment) {
-    this._commentListPresenter.onFailure(actionType, comment);
-  }
-
-  resetView() {
-    if (this._mode === Modes.POPUP) {
+  _escKeyDownHandler(evt) {
+    if (evt.key === `Escape` || evt.key === `Esc` || evt.code === 27) {
       this._handleClosePopupClick();
     }
   }
