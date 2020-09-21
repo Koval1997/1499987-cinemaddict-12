@@ -49,7 +49,6 @@ export default class SiteMenu extends AbstractView {
 
   _filterChangeHandler(evt) {
     evt.preventDefault();
-    console.log(evt.target);
     this._callback.filterChange(evt.target.id);
   }
 
