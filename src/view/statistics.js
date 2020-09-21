@@ -11,7 +11,7 @@ const WEEK_AGO = moment().subtract(7, `days`);
 const MONTH_AGO = moment().subtract(1, `month`);
 const YEAR_AGO = moment().subtract(1, `years`);
 
-const renderGenreChart = (chartContainer, films) => {
+const renderChart = (chartContainer, films) => {
   const genres = Object.keys(getAllGenres(films));
   const genresCount = Object.values(getAllGenres(films));
   chartContainer.height = BAR_HEIGHT * genres.length;
@@ -181,7 +181,7 @@ export default class Statistics extends SmartView {
   _setChart() {
     const chartContainer = this.getElement().querySelector(`.statistic__chart`);
 
-    this._genreChart = renderGenreChart(chartContainer, this._data.watchedFilms);
+    this._genreChart = renderChart(chartContainer, this._data.watchedFilms);
   }
 
   _filterByDate(film, period) {
