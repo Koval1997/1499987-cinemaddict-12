@@ -126,18 +126,31 @@ export default class FilmListPresenter {
     render(this._filmsListContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _handleFilmChange(actionType, updateType, update) {
+  _handleFilmChange(actionType, updateType, film, comment) {
     switch (actionType) {
       case UserActions.UPDATE_FILM_CARD:
-        this._api.updateFilm(update).then((response) => {
+        this._api.updateFilm(film)
+        .then((response) => {
           this._filmsModel.updateFilmCard(updateType, response);
         });
         break;
       case UserActions.ADD_COMMENT:
-        this._filmsModel.updateFilmCard(updateType, update);
+        this._api.addComment(film, comment)
+        .then((response) => {
+          this._filmsModel.updateFilmCard(updateType, response);
+        })
+        .catch(() => {
+          this._filmPresenter[film.id].onFailure(UserActions.ADD_COMMENT, comment);
+        });
         break;
       case UserActions.DELETE_COMMENT:
-        this._filmsModel.updateFilmCard(updateType, update);
+        this._api.deleteComment(comment)
+        .then(() => {
+          this._filmsModel.updateFilmCard(updateType, film);
+        })
+        .catch(() => {
+          this._filmPresenter[film.id].onFailure(UserActions.DELETE_COMMENT, comment);
+        });
         break;
     }
   }

@@ -34,7 +34,8 @@ export default class FilmPresenter {
 
   init(film) {
     this._film = film;
-    this._commentsModel.setComments(this._film.comments);
+    this._api.getComments(this._film.id)
+      .then((comments) => this._commentsModel.setComments(comments));
 
     const prevFilmComponent = this._filmComponent;
     const prevFilmDetailComponent = this._filmDetailComponent;
@@ -48,12 +49,19 @@ export default class FilmPresenter {
 
     this._filmDetailComponent = new FilmDetailsView(film);
     this._filmDetailComponent.setClosePopupClickHandler(this._handleClosePopupClick);
+    this._filmDetailComponent.setAddToFavoritesClickHandler(this._handleAddToFavoritesClick);
+    this._filmDetailComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+    this._filmDetailComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
 
     if (prevFilmComponent === null || prevFilmDetailComponent === null) {
       render(this._filmsListContainer, this._filmComponent, RenderPosition.BEFOREEND);
       return;
+    }
+
+    if (prevFilmDetailComponent !== null) {
+      this._initComments();
     }
 
     replace(this._filmComponent, prevFilmComponent);
@@ -68,7 +76,9 @@ export default class FilmPresenter {
     this._onChangeModes();
     this._mode = Modes.POPUP;
 
-    this._initComments();
+    if (!this._commentListPresenter) {
+      this._initComments();
+    }
 
     this._filmDetailComponent.setClosePopupClickHandler(this._handleClosePopupClick);
     this._filmDetailComponent.restoreHandlers();
@@ -88,17 +98,12 @@ export default class FilmPresenter {
     remove(this._filmComponent);
   }
 
-  _handleCommentListUpdate() {
+  _handleCommentListUpdate(userAction, updateTypes, film, newComment) {
     this._onChangeData(
-        UserActions.UPDATE_FILM_CARD,
-        UpdateTypes.PATCH,
-        Object.assign(
-            {},
-            this._film,
-            {
-              comments: this._commentsModel.getComments()
-            }
-        )
+        userAction,
+        updateTypes,
+        film,
+        newComment
     );
   }
 
@@ -150,9 +155,9 @@ export default class FilmPresenter {
   _handleClosePopupClick() {
     this._destroyDetailsComponent();
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
-    this._mode = Modes.DEFAULT;
     this._commentListPresenter.destroy();
     this._commentListPresenter = null;
+    this._mode = Modes.DEFAULT;
   }
 
   _destroyDetailsComponent() {
@@ -161,6 +166,10 @@ export default class FilmPresenter {
     this._onChangeData(UserActions.UPDATE_FILM_CARD, UpdateTypes.PATCH, filmPrevState);
 
     remove(this._filmDetailComponent);
+  }
+
+  onFailure(actionType, comment) {
+    this._commentListPresenter.onFailure(actionType, comment);
   }
 
   resetView() {

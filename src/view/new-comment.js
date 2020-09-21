@@ -1,6 +1,7 @@
 import SmartView from "./smart.js";
-import {generateId, getRandomDate} from '../utils/common';
+import moment from "moment";
 import {Emoji} from '../const';
+import {shake} from '../utils/common';
 
 export default class NewComment extends SmartView {
   constructor() {
@@ -119,11 +120,9 @@ export default class NewComment extends SmartView {
     return Object.assign(
         {},
         {
-          id: generateId(),
-          emoji: this._data.emoji,
-          author: `Maxim`,
-          text: this._data.text,
-          date: getRandomDate().format(`YYYY/MM/DD HH:MM`)
+          emotion: this._data.emoji,
+          comment: this._data.text,
+          date: moment(new Date()).format(`YYYY/MM/DD HH:MM`)
         }
     );
   }
@@ -138,5 +137,24 @@ export default class NewComment extends SmartView {
   setSubmitCommentHandler(callback) {
     this._callback.createComment = callback;
     this.getElement().addEventListener(`keydown`, this._commentSubmitHandler);
+  }
+
+  blockForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
+    this.getElement().querySelectorAll(`.film-details__emoji-item`).forEach(function (item) {
+      item.disabled = true;
+    });
+  }
+
+  _unblockForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
+    this.getElement().querySelectorAll(`.film-details__emoji-item`).forEach(function (item) {
+      item.disabled = false;
+    });
+  }
+
+  onFailure() {
+    shake(this);
+    this._unblockForm();
   }
 }

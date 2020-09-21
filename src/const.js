@@ -1,3 +1,5 @@
+export const SHAKE_TIMEOUT_INTERVAL = 600;
+
 export const Emoji = {
   SMILE: `smile`,
   SLEEPING: `sleeping`,
