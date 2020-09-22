@@ -75,7 +75,8 @@ const renderChart = (chartContainer, films) => {
 };
 
 const getAllGenres = (films) => {
-  const allGenres = [];
+  let allGenres = [];
+
   films.map((film) => allGenres.push(film.genres));
 
   let count = {};
