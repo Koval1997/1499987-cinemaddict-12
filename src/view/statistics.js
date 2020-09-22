@@ -75,11 +75,11 @@ const renderChart = (chartContainer, films) => {
 };
 
 const getAllGenres = (films) => {
-  let allGenres = [];
+  const allGenres = [];
 
   films.map((film) => allGenres.push(film.genres));
 
-  let count = {};
+  const count = {};
   allGenres.flat().forEach((x) => {
     count[x] = (count[x] || 0) + 1;
   });
