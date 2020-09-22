@@ -1,8 +1,9 @@
-import Observer from "../utils/observer.js";
+import Observer from '../utils/observer.js';
 
 export default class Films extends Observer {
   constructor() {
     super();
+
     this._films = [];
   }
 
@@ -16,8 +17,8 @@ export default class Films extends Observer {
     return this._films;
   }
 
-  updateFilmCard(updateType, update) {
-    const index = this._films.findIndex((film) => film.id === update.id);
+  updateFilmCard(updateType, updatedFilm) {
+    const index = this._films.findIndex((film) => film.id === updatedFilm.id);
 
     if (index === -1) {
       throw new Error(`Film is not exists`);
@@ -25,11 +26,11 @@ export default class Films extends Observer {
 
     this._films = [
       ...this._films.slice(0, index),
-      update,
+      updatedFilm,
       ...this._films.slice(index + 1)
     ];
 
-    this._notify(updateType, update);
+    this._notify(updateType, updatedFilm);
   }
 
   static adaptToClient(film) {

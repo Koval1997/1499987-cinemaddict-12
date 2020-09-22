@@ -50,3 +50,9 @@ export const PageModes = {
   FILMS: `FILMS`,
   STATISTICS: `STATISTICS`
 };
+
+export const RenderPositions = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
+  BEFORE: `before`,
+};

@@ -29,19 +29,14 @@ export const getWatchedFilmsCount = (films) => {
 };
 
 export const sortFilmByPropName = (firstFilm, secondFilm, propName) => {
-  if (firstFilm[propName] > secondFilm[propName]) {
-    return -1;
-  }
-  if (firstFilm[propName] < secondFilm[propName]) {
-    return 1;
-  }
-
-  return 0;
+  return (firstFilm[propName] > secondFilm[propName]) ? -1 : 1;
 };
 
-export const shake = (element) => {
-  element.getElement().style.animation = `shake ${SHAKE_TIMEOUT_INTERVAL / 1000}s`;
+export const shakeElement = (container) => {
+  const element = container.getElement();
+  element.style.animation = `shake ${SHAKE_TIMEOUT_INTERVAL / 1000}s`;
+
   setTimeout(() => {
-    element.getElement().style.animation = ``;
+    element.style.animation = ``;
   }, SHAKE_TIMEOUT_INTERVAL);
 };

@@ -4,6 +4,7 @@ import {FilterTypes} from '../const';
 export default class Filters extends Observer {
   constructor() {
     super();
+
     this._activeFilter = FilterTypes.ALL;
   }
 

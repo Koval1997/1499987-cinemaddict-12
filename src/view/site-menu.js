@@ -13,21 +13,7 @@ export default class SiteMenu extends AbstractView {
   }
 
   getTemplate() {
-    return this._createMenuTemplate(this._filters);
-  }
-
-  _createFilterTemplate(filter) {
-    const {type, name, count} = filter;
-
-    const className = this._currentFilterType === type && this._pageMode !== PageModes.STATISTICS ? `main-navigation__item--active` : ``;
-
-    return (
-      `<a href="#${type}" id=${type} class="main-navigation__item ${className}">${name} ${name !== `All movies` ? `<span class="main-navigation__item-count">${count}</span>` : ``}</a>`
-    );
-  }
-
-  _createMenuTemplate(filters) {
-    const filtersTemplate = filters.map((filter) => this._createFilterTemplate(filter)).join(``);
+    const filtersTemplate = this._filters.map((filter) => this._createFilterTemplate(filter)).join(``);
 
     const className = this._pageMode === PageModes.STATISTICS ? `main-navigation__additional--active` : ``;
 
@@ -41,9 +27,9 @@ export default class SiteMenu extends AbstractView {
     );
   }
 
-  _filterChangeHandler(evt) {
-    evt.preventDefault();
-    this._callback.filterChange(evt.target.id);
+  setStatisticsClickHandler(callback) {
+    this._callback.statisticsClick = callback;
+    this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statisticsClickHandler);
   }
 
   setFilterChangeHandler(callback) {
@@ -51,13 +37,23 @@ export default class SiteMenu extends AbstractView {
     this.getElement().querySelector(`.main-navigation__items`).addEventListener(`click`, this._filterChangeHandler);
   }
 
+  _createFilterTemplate(filter) {
+    const {type, name, count} = filter;
+
+    const className = this._currentFilterType === type && this._pageMode !== PageModes.STATISTICS ? `main-navigation__item--active` : ``;
+
+    return (
+      `<a href="#${type}" id=${type} class="main-navigation__item ${className}">${name} ${name !== `All movies` ? `<span class="main-navigation__item-count">${count}</span>` : ``}</a>`
+    );
+  }
+
+  _filterChangeHandler(evt) {
+    evt.preventDefault();
+    this._callback.filterChange(evt.target.id);
+  }
+
   _statisticsClickHandler(evt) {
     evt.preventDefault();
     this._callback.statisticsClick();
-  }
-
-  setStatisticsClickHandler(callback) {
-    this._callback.statisticsClick = callback;
-    this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statisticsClickHandler);
   }
 }

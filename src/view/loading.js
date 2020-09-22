@@ -1,17 +1,13 @@
-import AbstractView from "./abstract.js";
+import AbstractView from './abstract.js';
 
 export default class Loading extends AbstractView {
   constructor() {
     super();
   }
 
-  _createNoTaskTemplate() {
+  getTemplate() {
     return `<p class="board__no-tasks">
       Loading...
     </p>`;
-  }
-
-  getTemplate() {
-    return this._createNoTaskTemplate();
   }
 }

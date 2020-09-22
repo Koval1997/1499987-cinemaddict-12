@@ -4,6 +4,7 @@ import {PageModes} from '../const';
 export default class Page extends Observer {
   constructor() {
     super();
+
     this._activePageMode = PageModes.FILMS;
   }
 
