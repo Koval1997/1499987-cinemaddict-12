@@ -5,7 +5,7 @@ import CommentListPresenter from './comments-list';
 import {render, remove, replace} from '../utils/render';
 import {Modes, UserActions, UpdateTypes, RenderPositions} from '../const';
 
-export default class FilmPresenter {
+export default class Film {
   constructor(filmsListContainer, onChangeData, onChangeModes, api) {
     this._filmsListContainer = filmsListContainer;
 

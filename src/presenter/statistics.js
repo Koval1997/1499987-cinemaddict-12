@@ -2,7 +2,7 @@ import StatisticsView from '../view/statistics';
 import {render, remove} from '../utils/render';
 import {RenderPositions} from '../const';
 
-export default class StatisticsPresenter {
+export default class Statistics {
   constructor(statisticsContainer, filmsModel) {
     this._statisticsContainer = statisticsContainer;
     this._filmsModel = filmsModel;

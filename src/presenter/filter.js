@@ -2,7 +2,7 @@ import MenuView from '../view/site-menu';
 import {render, replace, remove} from '../utils/render';
 import {FilterTypes, UpdateTypes, PageModes, RenderPositions} from '../const';
 
-export default class FilterPresenter {
+export default class Filter {
   constructor(filterContainer, filterModel, filmsModel, filmListPresenter, statisticsPresenter, pageModeModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;

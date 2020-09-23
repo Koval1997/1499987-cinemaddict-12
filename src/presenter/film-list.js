@@ -11,7 +11,7 @@ import {sortFilmByPropName} from '../utils/common';
 
 const FILM_COUNT_PER_STEP = 5;
 
-export default class FilmListPresenter {
+export default class FilmsList {
   constructor(pageMainElement, filterModel, filmsModel, api) {
     this._isLoading = true;
     this._api = api;

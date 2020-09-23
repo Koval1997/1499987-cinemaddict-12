@@ -2,7 +2,7 @@ import CommentsView from '../view/comments';
 import {remove, appendChild} from '../utils/render';
 import {shakeElement} from '../utils/common';
 
-export default class CommentPresenter {
+export default class Comment {
   constructor(commentsContainer, onDeleteComment) {
     this._commentsContainer = commentsContainer;
     this._onDeleteComment = onDeleteComment;

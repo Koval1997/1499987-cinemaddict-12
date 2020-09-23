@@ -1,6 +1,6 @@
 import Observer from '../utils/observer.js';
 
-export default class CommentsModel extends Observer {
+export default class Comments extends Observer {
   constructor() {
     super();
 

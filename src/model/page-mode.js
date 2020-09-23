@@ -1,7 +1,7 @@
 import Observer from '../utils/observer';
 import {PageModes} from '../const';
 
-export default class Page extends Observer {
+export default class PageMode extends Observer {
   constructor() {
     super();
 

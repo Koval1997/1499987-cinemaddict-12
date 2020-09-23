@@ -3,7 +3,7 @@ import NewCommentView from '../view/new-comment';
 import {appendChild, remove} from '../utils/render';
 import {UserActions, UpdateTypes} from '../const';
 
-export default class CommentListPresenter {
+export default class CommentList {
   constructor(commentsContainer, newCommentContainer, film, onChangeData, commentsModel) {
     this._commentsContainer = commentsContainer;
     this._newCommentContainer = newCommentContainer;

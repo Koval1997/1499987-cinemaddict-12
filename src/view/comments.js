@@ -18,7 +18,7 @@ export default class Comments extends AbstractView {
   getTemplate() {
     const {id, emotion, comment, author, date} = this._comment;
 
-    const formattedDate = moment(date).format(`YYYY/MM/DD HH:MM`);
+    const formattedDate = moment(date).fromNow();
 
     return `<li class="film-details__comment" id="${id}">
     <span class="film-details__comment-emoji">
